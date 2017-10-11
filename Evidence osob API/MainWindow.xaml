@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Evidence_osob_API"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="539" Width="916"  MinHeight="539" MinWidth="916" Background="#FFF7C77F">
     <Grid>
-        
+        <Frame x:Name="frame" Content="" NavigationUIVisibility="Hidden" Width="900" Height="500"/>
+
     </Grid>
 </Window>

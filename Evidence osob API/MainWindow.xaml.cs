@@ -23,6 +23,8 @@ namespace Evidence_osob_API
         public MainWindow()
         {
             InitializeComponent();
+            MainPage MainPage = new MainPage();
+            frame.NavigationService.Navigate(MainPage);
         }
     }
 }
