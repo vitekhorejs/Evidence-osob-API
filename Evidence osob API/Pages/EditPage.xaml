@@ -29,7 +29,7 @@
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Click="DeleteButton_Click" x:Name="Delete_Button" Width="130" Height="50" Content="Smazat" Background="#FFFF3838" Margin="0,-125,240,0" />
                 <Button Click="UpdateButton_Click" x:Name="Update_Button" Width="130" Height="50" Content="Upravit" Background="#FF52BF5C" Margin="240,-125,0,0" />
-                <Button Click="BackButton_Click" x:Name="Back_Button" Width="130" Height="50" Content="Zpět" Margin="-1355,-800,0,0"/>
+                <Button Click="BackButton_Click" x:Name="Back_Button" Width="130" Height="50" Content="Zpět" Margin="-1355,-600,0,0"/>
             </StackPanel>
 
 

@@ -28,6 +28,7 @@ namespace Evidence_osob_API
             string url = "https://student.sps-prosek.cz/~horejvi14/api/";
             var client = new RestClient(url);
             var request = new RestRequest(Method.GET);
+            
             var response = client.Execute<List<Person>>(request);
             listwiew.ItemsSource = response.Data;
         }
@@ -113,7 +114,7 @@ namespace Evidence_osob_API
                 request.AddParameter("BirthDate", BirthDate.SelectedDate.Value);
 
                 var response = client.Execute(request);
-                MessageBox.Show(response.ToString(), "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(response.Content, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 DisplayResults();
 
