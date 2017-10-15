@@ -52,7 +52,21 @@ namespace Evidence_osob_API
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            DisplayResults();
+            if (SearchText.Text != "")
+            {
+                string url = "https://student.sps-prosek.cz/~horejvi14/api/";
+                var client = new RestClient(url);
+                var request = new RestRequest(Method.GET);
+                request.AddParameter("Name", SearchText.Text);
+
+                var response = client.Execute<List<Person>>(request);
+                listwiew.ItemsSource = response.Data;
+            }
+            else
+            {
+                DisplayResults();
+            }
+            
         }
 
         int x = 0;
@@ -105,13 +119,21 @@ namespace Evidence_osob_API
 
                 string url = "https://student.sps-prosek.cz/~horejvi14/api/";
                 var client = new RestClient(url);
-                var request = new RestRequest(Method.PUT);
+                var request = new RestRequest(Method.POST);
                 request.AddParameter("Name", Name.Text);
-                request.AddParameter("SurName", SurName.Text);
+                request.AddParameter("Surname", SurName.Text);
                 request.AddParameter("BirthNumber1", RodneCislo1.Text);
                 request.AddParameter("BirthNumber2", RodneCislo2.Text);
-                request.AddParameter("Gender", Gender.Text);
-                request.AddParameter("BirthDate", BirthDate.SelectedDate.Value);
+                //request.AddParameter("Gender", Gender.Text);
+                if (Gender.Text == "Muž")
+                {
+                    request.AddParameter("Gender", 0);
+                }
+                else
+                {
+                    request.AddParameter("Gender", 1);
+                }
+                request.AddParameter("BirthDate", BirthDate.SelectedDate.Value.Date.ToString("yyyy-MM-dd"));
 
                 var response = client.Execute(request);
                 MessageBox.Show(response.Content, "Info", MessageBoxButton.OK, MessageBoxImage.Information);

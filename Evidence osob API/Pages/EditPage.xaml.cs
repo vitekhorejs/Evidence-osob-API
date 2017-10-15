@@ -33,14 +33,22 @@ namespace Evidence_osob_API
         {
             InitializeComponent();
             obj = person;
-            ID = person.ID;
-            Name.Text = person.NAME;
-            SurName.Text = person.SURNAME;
-            RodneCislo1.Text = person.BIRTHNUMBER1;
-            RodneCislo2.Text = person.BIRTHNUMBER2;
-            BirthDate.SelectedDate = person.BIRTHDATE;
-            birthdate = person.BIRTHDATE;
-            Gender.Content = person.GENDER;
+            ID = person.Id;
+            Name.Text = person.Name;
+            SurName.Text = person.Surname;
+            RodneCislo1.Text = person.BirthNumber1;
+            RodneCislo2.Text = person.BirthNumber2;
+            BirthDate.SelectedDate = person.BirthDate;
+            birthdate = person.BirthDate;
+            if (person.Gender == "0")
+            {
+                Gender.Content = "Muž";
+            }
+            else
+            {
+                Gender.Content = "Žena";
+            }
+            //Gender.Content = person.Gender;
             //Added.Content = person.Added;
             //Edited.Content = person.Edited;
             Age.Content = person.Age;
@@ -58,9 +66,9 @@ namespace Evidence_osob_API
                     string url = "https://student.sps-prosek.cz/~horejvi14/api/";
                     var client = new RestClient(url);
                     var request = new RestRequest(Method.DELETE);
-                    request.AddParameter("ID",ID);
+                    request.AddParameter("Id",ID);
                     var response = client.Execute(request);
-                    MessageBox.Show(response.ToString(), "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(response.Content, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                     MainPage Page1 = new MainPage();
                     this.NavigationService.Navigate(new MainPage());
                     break;
@@ -87,12 +95,22 @@ namespace Evidence_osob_API
             var request = new RestRequest(Method.PUT);
             request.AddParameter("Id", ID);
             request.AddParameter("Name", Name.Text);
-            request.AddParameter("SurName", SurName.Text);
+            request.AddParameter("Surname", SurName.Text);
             request.AddParameter("BirthNumber1", RodneCislo1.Text);
             request.AddParameter("BirthNumber2", RodneCislo2.Text);
-            request.AddParameter("Gender", Gender.Content);
-            request.AddParameter("BirthDate", BirthDate.SelectedDate.Value);
+            request.AddParameter("BirthDate", BirthDate.SelectedDate.Value.Date.ToString("yyyy-MM-dd"));
+            //request.AddParameter("Gender", Gender.Content);
+            if (Gender.Content.ToString() == "Muž")
+            {
+                request.AddParameter("Gender", 0);
+            }
+            else
+            {
+                request.AddParameter("Gender", 1);
+            }
+            
             var response = client.Execute(request);
+            MessageBox.Show(response.Content, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
 
         }
         private void BackButton_Click(object sender, RoutedEventArgs e)

@@ -21,7 +21,7 @@
             <Label x:Name="BirthDate_label" Content="Datum narození:" FontSize="16" FontWeight="Bold" Margin="0" HorizontalAlignment="Center" Width="356" />
             <DatePicker x:Name="BirthDate"  Margin="0" FontSize="14" HorizontalAlignment="Center" Width="356" Height="25" />
             <Label x:Name="Gender_label" Content="Pohlaví:" FontSize="16" FontWeight="Bold" Margin="0" HorizontalAlignment="Center" Width="356" />
-            <Label x:Name="Gender" Content="" Margin="0" FontSize="14" HorizontalAlignment="Center" Width="356" Height="25"/>
+            <Label x:Name="Gender" Content="" Margin="0" FontSize="14" HorizontalAlignment="Center" Width="356" Height="28"/>
             
             <Label x:Name="Age_label" Content="Věk:" FontSize="16" FontWeight="Bold" Margin="0" HorizontalAlignment="Center" Width="356"/>
             <Label x:Name="Age" Content="" Margin="0" FontSize="14" HorizontalAlignment="Center" Width="356" Height="25" />
