@@ -17,6 +17,7 @@ namespace Evidence_osob_API
         public string Gender { get; set; }
         //public string Added { get; set; }
         //public string Edited { get; set; }
+
         public int Age
         {
             get { return _age(); }

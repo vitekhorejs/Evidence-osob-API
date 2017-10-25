@@ -24,6 +24,8 @@ namespace Evidence_osob_API
         public object obj;
         public int ID;
         public DateTime birthdate;
+        public string Url = "https://student.sps-prosek.cz/~horejvi14/api/";
+
         public EditPage()
         {
             InitializeComponent();
@@ -48,30 +50,31 @@ namespace Evidence_osob_API
             {
                 Gender.Content = "Žena";
             }
-            //Gender.Content = person.Gender;
-            //Added.Content = person.Added;
-            //Edited.Content = person.Edited;
             Age.Content = person.Age;
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            //ListViewItem item = sender as ListViewItem;
-            //object obj = item.Content;
             MessageBoxResult result = MessageBox.Show("Smazat záznam?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
             switch (result)
             {
                 case MessageBoxResult.Yes:
-                    //await Database.DeleteItemAsync(obj as TodoItem);
-                    string url = "https://student.sps-prosek.cz/~horejvi14/api/";
-                    var client = new RestClient(url);
+                    var client = new RestClient(Url);
                     var request = new RestRequest(Method.DELETE);
                     request.AddParameter("Id",ID);
                     var response = client.Execute(request);
-                    MessageBox.Show(response.Content, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        MessageBox.Show(response.Content, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Při komunikaci se serverem došlo k chybě.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     MainPage Page1 = new MainPage();
                     this.NavigationService.Navigate(new MainPage());
                     break;
+
                 case MessageBoxResult.No:
                     break;
             }
@@ -79,19 +82,7 @@ namespace Evidence_osob_API
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            /*TodoItem item = new TodoItem();
-            item.ID = ID;
-            item.Name = Name.Text;
-            item.SurName = SurName.Text;
-            item.RodneCislo = RodneCislo.Content.ToString();
-            //item.BirthDate = new DateTime(birthdate.);
-            item.Gender = Gender.Content.ToString();
-            //item.Edited = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-            //item.Added = ;
-            Database.SaveItemAsync(item);*/
-
-            string url = "https://student.sps-prosek.cz/~horejvi14/api/";
-            var client = new RestClient(url);
+            var client = new RestClient(Url);
             var request = new RestRequest(Method.PUT);
             request.AddParameter("Id", ID);
             request.AddParameter("Name", Name.Text);
@@ -99,7 +90,6 @@ namespace Evidence_osob_API
             request.AddParameter("BirthNumber1", RodneCislo1.Text);
             request.AddParameter("BirthNumber2", RodneCislo2.Text);
             request.AddParameter("BirthDate", BirthDate.SelectedDate.Value.Date.ToString("yyyy-MM-dd"));
-            //request.AddParameter("Gender", Gender.Content);
             if (Gender.Content.ToString() == "Muž")
             {
                 request.AddParameter("Gender", 0);
@@ -108,11 +98,17 @@ namespace Evidence_osob_API
             {
                 request.AddParameter("Gender", 1);
             }
-            
             var response = client.Execute(request);
-            MessageBox.Show(response.Content, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                MessageBox.Show(response.Content, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Při komunikaci se serverem došlo k chybě.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }  
         }
+
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             MainPage Page1 = new MainPage();

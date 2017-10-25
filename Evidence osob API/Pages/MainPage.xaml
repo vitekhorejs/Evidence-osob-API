@@ -9,7 +9,7 @@
       Title="MainPage" Height="500" Width="900" MaxHeight="500" MaxWidth="900" MinHeight="500" MinWidth="900" Background="#FFF7C77F">
 
     <Grid Width="900" Height="500">
-        <ListView x:Name="listwiew" Margin="10,0,0,35" Height="395" Width="550" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Padding="10,5" >
+        <ListView x:Name="listview" Margin="10,0,0,35" Height="395" Width="550" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Padding="10,5" >
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <EventSetter Event="MouseDoubleClick" Handler="listViewItem_MouseDoubleClick" />

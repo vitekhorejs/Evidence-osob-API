@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RestSharp;
+using System.Text.RegularExpressions;
 
 namespace Evidence_osob_API
 {
@@ -21,16 +22,12 @@ namespace Evidence_osob_API
     /// </summary>
     public partial class MainPage : Page
     {
+        public string Url = "https://student.sps-prosek.cz/~horejvi14/api/";
+
         public MainPage()
         {
             InitializeComponent();
-
-            string url = "https://student.sps-prosek.cz/~horejvi14/api/";
-            var client = new RestClient(url);
-            var request = new RestRequest(Method.GET);
-            
-            var response = client.Execute<List<Person>>(request);
-            listwiew.ItemsSource = response.Data;
+            listview.ItemsSource = GetData();
         }
 
         public void listViewItem_MouseDoubleClick(object sender, RoutedEventArgs e)
@@ -41,32 +38,40 @@ namespace Evidence_osob_API
             this.NavigationService.Navigate(new EditPage(obj as Person));
         }
 
-        private void DisplayResults()
+        private List<Person> GetData(string SearchSurname = null)
         {
-            string url = "https://student.sps-prosek.cz/~horejvi14/api/";
-            var client = new RestClient(url);
-            var request = new RestRequest(Method.GET);
+            var client = new RestClient(Url);
+            var request = new RestRequest(Method.GET);      
+            if (SearchSurname != null || SearchSurname != "")
+            {
+                request.AddParameter("Surname", SearchSurname);
+            }
             var response = client.Execute<List<Person>>(request);
-            listwiew.ItemsSource = response.Data;
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                MessageBox.Show("Při komunikaci se serverem došlo k chybě.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+            else
+            {
+                return response.Data;
+            }
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SearchText.Text != "")
+            if (Regex.IsMatch(SearchText.Text, @"^[a-zA-Z]+$") == false)
             {
-                string url = "https://student.sps-prosek.cz/~horejvi14/api/";
-                var client = new RestClient(url);
-                var request = new RestRequest(Method.GET);
-                request.AddParameter("Name", SearchText.Text);
-
-                var response = client.Execute<List<Person>>(request);
-                listwiew.ItemsSource = response.Data;
+                MessageBox.Show("Hledaný výraz je neplatný.", "Upozornění", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else if (SearchText.Text != "")
+            {
+                listview.ItemsSource = GetData(SearchText.Text);
             }
             else
             {
-                DisplayResults();
+                listview.ItemsSource = GetData();
             }
-            
         }
 
         int x = 0;
@@ -94,11 +99,11 @@ namespace Evidence_osob_API
             }
             else if (Int32.TryParse(RodneCislo1.Text, out x) == false || RodneCislo1.Text.ToString().Length != 6)
             {
-                MessageBox.Show("Neplatné rodné číslo.", "Upozornění", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Neplatné rodné číslo.\nFormát rodného čísla:\n6 číslic (obsahuje informace o datu narození a pohlaví, lomítko, 4 číslíce (pořadové číslo)", "Upozornění", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else if (Int32.TryParse(RodneCislo2.Text, out x) == false || RodneCislo2.Text.ToString().Length != 4)
             {
-                MessageBox.Show("Neplatné rodné číslo.", "Upozornění", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Neplatné rodné číslo.\nFormát rodného čísla:\n6 číslic (obsahuje informace o datu narození a pohlaví, lomítko, 4 číslíce (pořadové číslo)", "Upozornění", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else if (BirthDate.Text == "" || BirthDate.Text == null)
             {
@@ -106,25 +111,12 @@ namespace Evidence_osob_API
             }
             else
             {
-                /*Person osoba = new Person();
-                osoba.Name = Name.Text;
-                osoba.SurName = SurName.Text;
-                osoba.BirthNumber1 = RodneCislo1.Text;
-                osoba.BirthNumber2 = RodneCislo2.Text;
-                osoba.Gender = Gender.Text;
-                osoba.BirthDate = BirthDate.SelectedDate.Value;*/
-                //osoba.Added = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-                //osoba.Edited = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-                //Database.SaveItemAsync(item);
-
-                string url = "https://student.sps-prosek.cz/~horejvi14/api/";
-                var client = new RestClient(url);
+                var client = new RestClient(Url);
                 var request = new RestRequest(Method.POST);
                 request.AddParameter("Name", Name.Text);
                 request.AddParameter("Surname", SurName.Text);
                 request.AddParameter("BirthNumber1", RodneCislo1.Text);
                 request.AddParameter("BirthNumber2", RodneCislo2.Text);
-                //request.AddParameter("Gender", Gender.Text);
                 if (Gender.Text == "Muž")
                 {
                     request.AddParameter("Gender", 0);
@@ -134,12 +126,16 @@ namespace Evidence_osob_API
                     request.AddParameter("Gender", 1);
                 }
                 request.AddParameter("BirthDate", BirthDate.SelectedDate.Value.Date.ToString("yyyy-MM-dd"));
-
                 var response = client.Execute(request);
-                MessageBox.Show(response.Content, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                DisplayResults();
-
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    listview.ItemsSource = GetData();
+                    MessageBox.Show(response.Content, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Při komunikaci se serverem došlo k chybě.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }  
             }
         }
     }
