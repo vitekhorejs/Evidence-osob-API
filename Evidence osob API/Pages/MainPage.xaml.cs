@@ -60,13 +60,15 @@ namespace Evidence_osob_API
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Regex.IsMatch(SearchText.Text, @"^[a-zA-Z]+$") == false)
+            if (SearchText.Text != "")
             {
-                MessageBox.Show("Hledaný výraz je neplatný.", "Upozornění", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else if (SearchText.Text != "")
-            {
-                listview.ItemsSource = GetData(SearchText.Text);
+                if (Regex.IsMatch(SearchText.Text, @"^[a-zA-Z]+$") == false)
+                {
+                    MessageBox.Show("Hledaný výraz je neplatný.", "Upozornění", MessageBoxButton.OK, MessageBoxImage.Information);
+                } else
+                {
+                    listview.ItemsSource = GetData(SearchText.Text);
+                }
             }
             else
             {
@@ -113,6 +115,10 @@ namespace Evidence_osob_API
             {
                 var client = new RestClient(Url);
                 var request = new RestRequest(Method.POST);
+                //SimpleJson.SerializeObject();
+                //https://stackoverflow.com/questions/737385/easiest-form-validation-library-for-php
+                //https://stackoverflow.com/questions/19758954/get-data-from-json-file-with-php
+                //knihovna na overeni datovehu typu v php, celej json naparsovat podle tridy 
                 request.AddParameter("Name", Name.Text);
                 request.AddParameter("Surname", SurName.Text);
                 request.AddParameter("BirthNumber1", RodneCislo1.Text);
