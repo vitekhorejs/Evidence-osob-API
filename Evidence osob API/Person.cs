@@ -32,7 +32,7 @@ namespace Evidence_osob_API
 
         public override string ToString()
         {
-            return Surname + " " + Name + "  " + BirthNumber1+"/"+ BirthNumber2 + " vek: "+Age + " datum: "+ BirthDate;
+            return Surname + " " + Name + "  " + BirthNumber1+"/"+ BirthNumber2 + " vek: "+Age + " datum: "+ BirthDate.ToShortDateString();
         }
     }
 }

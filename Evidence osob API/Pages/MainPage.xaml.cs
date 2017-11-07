@@ -115,12 +115,7 @@ namespace Evidence_osob_API
             {
                 var client = new RestClient(Url);
                 var request = new RestRequest(Method.POST);
-                //SimpleJson.SerializeObject();
-                //https://stackoverflow.com/questions/737385/easiest-form-validation-library-for-php
-                //https://stackoverflow.com/questions/19758954/get-data-from-json-file-with-php
-                //knihovna na overeni datovehu typu v php, celej json naparsovat podle tridy 
-                //jsonMapper knihovna na tomhle :)
-                https://stackoverflow.com/questions/5397758/json-decode-to-custom-class
+                
                 request.AddParameter("Name", Name.Text);
                 request.AddParameter("Surname", SurName.Text);
                 request.AddParameter("BirthNumber1", RodneCislo1.Text);
@@ -133,7 +128,7 @@ namespace Evidence_osob_API
                 {
                     request.AddParameter("Gender", 1);
                 }
-                request.AddParameter("BirthDate", BirthDate.SelectedDate.Value.Date.ToString("yyyy-MM-dd"));
+                request.AddParameter("BirthDate", BirthDate.SelectedDate.Value.Date);
                 var response = client.Execute(request);
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
